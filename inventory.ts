@@ -20,7 +20,7 @@ interface Item {
 
 // Example items
 const broccoli: Item = {
-    id: 1,
+    id: 0,
     name: "broccoli",
     category: Category.Grocery,
     price: 60,
@@ -28,13 +28,15 @@ const broccoli: Item = {
 }
 
 const laptop: Item = {
-    id: 2,
+    id: 1,
     name: "laptop",
     category: Category.Electronics,
     price: 200,
     stock: 5,
     warrantyPeriodMonths: 3,
 }
+
+let inventory = [broccoli, laptop];
 
 // display item information
 function printItemDetails(item: Item) {
@@ -72,28 +74,58 @@ function addNewItem(): Item {
         warrantyPeriodMonths: warrantyPeriodMonths,
     }
 
-    printItemDetails(item);
+    inventory.push(item);
     return item;
 }
 
-function updateStock(item: Item){
+function updateStock(){
     console.log("You are about to update the stock quantity------")
     const prompt = promptSync();
+    const id = Number(prompt('Enter the ID of the item you would like to change: '))
     const change = Number(prompt('Enter the change in stock quantity: '));
+    
+    const item = getItem(id);
     item.stock += change;
 
-    printItemDetails(item);
     return item.stock;
 }
 
+function getItem(id: number){
+    const itemRequired = inventory[id];
+    return itemRequired;
+}
+
 //test area
-printItemDetails(broccoli);
-console.log("-------")
-printItemDetails(laptop);
-console.log("-------");
-addNewItem();
-console.log("-------");
-updateStock(laptop);
+let i: boolean = false;
+
+while (i == false) {
+    const prompt = promptSync();
+    console.log("0 - print whole inventory");
+    console.log("1 - add a new item to inventory");
+    console.log("2 - update a stock quantity")
+    console.log("3 - exit loop")
+    const userDecision = Number(prompt('Enter action: '));
+    
+    switch(userDecision){
+        case 0:
+            inventory.forEach(element => {
+                console.log(printItemDetails(element));
+                console.log("-------");
+              });
+            break;
+        case 1:
+            addNewItem();
+            console.log("-------");
+            break;
+        case 2:
+            updateStock();
+            break;
+        case 3:
+            i = true;
+            break;
+    }
+}
+
 
 
 
@@ -104,3 +136,4 @@ updateStock(laptop);
 // ✅ 2. Function to update the stock of an item (input: item, change in stock quantity, output: updated stock quantity )
 // 3. Function to find items by category (input: 'Electronics', output: all electronic items)
 // 4. Function to calculate the total price of items in stock (input: 'item', price x stock, output: total price of items in stock)
+// 5. map refactoring
