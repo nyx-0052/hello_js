@@ -101,6 +101,6 @@ updateStock(laptop);
 
 // Extensions
 // ✅ 1. Function to add a new item to the inventory (input: the list of attributes of the item, output: item)
-// 2. Function to update the stock of an item (input: item, change in stock quantity, output: updated stock quantity )
+// ✅ 2. Function to update the stock of an item (input: item, change in stock quantity, output: updated stock quantity )
 // 3. Function to find items by category (input: 'Electronics', output: all electronic items)
 // 4. Function to calculate the total price of items in stock (input: 'item', price x stock, output: total price of items in stock)
