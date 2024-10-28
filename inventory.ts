@@ -18,7 +18,7 @@ interface Item {
     warrantyPeriodMonths?: number;  // Optional property for a warranty period in months (only applicable to electronics)
 }
 
-// Example items
+// DELCARING ITEMS
 const broccoli: Item = {
     id: 0,
     name: "broccoli",
@@ -36,9 +36,15 @@ const laptop: Item = {
     warrantyPeriodMonths: 3,
 }
 
-let inventory = [broccoli, laptop];
 
-// display item information
+//FUNCTION - to get item from id
+let inventory = [broccoli, laptop];
+function getItem(id: number){
+    const itemRequired = inventory[id];
+    return itemRequired;
+}
+
+// FUNCTION - 0 - PRINT whole inventory
 function printItemDetails(item: Item) {
     console.log("ID:", item.id);
     console.log("Name:", item.name);
@@ -54,7 +60,9 @@ function printItemDetails(item: Item) {
     //console.log(`Warranty Period: ${item.warrantyPeriodMonths ?? "NA"} months`);
 }
 
-// input a new item to inventory
+
+
+// FUNCTION - 1 - ADD a new item to inventory
 function addNewItem(): Item {
     console.log("You are about to add a new item to the inventory------")
     const prompt = promptSync();
@@ -78,6 +86,7 @@ function addNewItem(): Item {
     return item;
 }
 
+// FUNCTION - 2 - UPDATE a stock quantity
 function updateStock(){
     console.log("You are about to update the stock quantity------")
     const prompt = promptSync();
@@ -90,20 +99,19 @@ function updateStock(){
     return item.stock;
 }
 
-function getItem(id: number){
-    const itemRequired = inventory[id];
-    return itemRequired;
-}
+// FUNCTION - 3 - SEARCH by category
+
 
 //test area
 let i: boolean = false;
 
 while (i == false) {
     const prompt = promptSync();
-    console.log("0 - print whole inventory");
-    console.log("1 - add a new item to inventory");
-    console.log("2 - update a stock quantity")
-    console.log("3 - exit loop")
+    console.log("0 - PRINT whole inventory");
+    console.log("1 - ADD a new item to inventory");
+    console.log("2 - UPDATE a stock quantity")
+    console.log("3 - SEARCH by category")
+    console.log("4 - EXIT loop")
     const userDecision = Number(prompt('Enter action: '));
     
     switch(userDecision){
@@ -120,7 +128,9 @@ while (i == false) {
         case 2:
             updateStock();
             break;
-        case 3:
+        case 3: 
+              
+        case 4:
             i = true;
             break;
     }
