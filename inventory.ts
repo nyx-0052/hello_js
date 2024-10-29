@@ -1,6 +1,5 @@
 import promptSync from 'prompt-sync';
 
-
 // Enum for category of items
 enum Category {
     Electronics = "Electronics",
@@ -36,11 +35,17 @@ const laptop: Item = {
     warrantyPeriodMonths: 3,
 }
 
-
 //FUNCTION - to get item from id
-let inventory = [broccoli, laptop];
-function getItem(id: number){
-    const itemRequired = inventory[id];
+let inventory = new Map<number, Item>([
+    [0, broccoli],
+    [1, laptop]
+])
+
+function getItem(id: number) {
+    const itemRequired = inventory.get(id);
+    if (itemRequired === undefined) {
+       throw new Error('getItem failed: item is undefined');
+    }
     return itemRequired;
 }
 
@@ -59,8 +64,6 @@ function printItemDetails(item: Item) {
 
     //console.log(`Warranty Period: ${item.warrantyPeriodMonths ?? "NA"} months`);
 }
-
-
 
 // FUNCTION - 1 - ADD a new item to inventory
 function addNewItem(): Item {
@@ -82,55 +85,65 @@ function addNewItem(): Item {
         warrantyPeriodMonths: warrantyPeriodMonths,
     }
 
-    inventory.push(item);
+    inventory.set(item.id, item);
     return item;
 }
 
 // FUNCTION - 2 - UPDATE a stock quantity
-function updateStock(){
+function updateStock() {
     console.log("------ 2 - UPDATE a stock quantity ------")
     const prompt = promptSync();
     const id = Number(prompt('Enter the ID of the item you would like to change: '))
     const change = Number(prompt('Enter the change in stock quantity: '));
-    
+
     const item = getItem(id);
     item.stock += change;
-
     return item.stock;
 }
 
 // FUNCTION - 3 - SEARCH by category
-function searchByCategory(){
+function searchByCategory() {
     console.log("------ 3 - SEARCH by category------");
     const prompt = promptSync();
     const category = prompt('Enter the category you want to search: ');
-    
-    for (let i = 0; i<inventory.length; i++){
-        if (inventory[i].category === category){
-            printItemDetails(inventory[i]);
-        }
+
+    for (let value of inventory.values()) {
+       if (value.category === category){
+        console.log(value.name);
+       }
     }
 }
 
+// FUNCTION - 4 - CALCULATING total value of stock
+function calculateTotalValue() {
+    console.log("------ 4 - CALCULATING total value of stock ------");
+    const prompt = promptSync();
+    const id = Number(prompt('Enter the ID of the item you would like to calculate the cost of: '));
+    const item = getItem(id);
+    console.log("The total price of", item.name, "is $", item.stock*item.price);
+
+}
 
 //test area
 let i: boolean = false;
 
 while (i == false) {
     console.log("-------");
-    const prompt = promptSync();
     console.log("0 - PRINT whole inventory");
     console.log("1 - ADD a new item to inventory");
     console.log("2 - UPDATE a stock quantity")
     console.log("3 - SEARCH by category")
-    console.log("4 - EXIT loop")
+    console.log("4 - CALCULATING total value of stock")
+    console.log("5 - EXIT loop")
+    const prompt = promptSync();
     const userDecision = Number(prompt('Enter action: '));
-    
-    switch(userDecision){
+
+    switch (userDecision) {
         case 0:
             inventory.forEach(element => {
-                console.log(printItemDetails(element));
-              });
+                printItemDetails(element);
+                console.log('_______________')
+            });
             break;
         case 1:
             addNewItem();
@@ -142,19 +155,20 @@ while (i == false) {
             searchByCategory();
             break;
         case 4:
+            calculateTotalValue();
+            break;
+        case 5:
             i = true;
             break;
     }
 }
 
-
-
-
-
-
 // Extensions
 // ✅ 1. Function to add a new item to the inventory (input: the list of attributes of the item, output: item)
 // ✅ 2. Function to update the stock of an item (input: item, change in stock quantity, output: updated stock quantity )
 // ✅ 3. Function to find items by category (input: 'Electronics', output: all electronic items)
-// 4. Function to calculate the total price of items in stock (input: 'item', price x stock, output: total price of items in stock)
-// 5. map refactoring
+// ✅ 4. Function to calculate the total price of items in stock (input: 'item', price x stock, output: total price of items in stock)
+// ✅ 5. map refactoring
+// 6. differnce between no of ==
+// 7. difference between undefined and null
+// 8. difference between java and ts
