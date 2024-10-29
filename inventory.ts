@@ -64,7 +64,7 @@ function printItemDetails(item: Item) {
 
 // FUNCTION - 1 - ADD a new item to inventory
 function addNewItem(): Item {
-    console.log("You are about to add a new item to the inventory------")
+    console.log("------ 1 - ADD a new item to inventory ------")
     const prompt = promptSync();
     const id = Number(prompt('Enter the ID '));
     const name = prompt('Enter the name ');
@@ -88,7 +88,7 @@ function addNewItem(): Item {
 
 // FUNCTION - 2 - UPDATE a stock quantity
 function updateStock(){
-    console.log("You are about to update the stock quantity------")
+    console.log("------ 2 - UPDATE a stock quantity ------")
     const prompt = promptSync();
     const id = Number(prompt('Enter the ID of the item you would like to change: '))
     const change = Number(prompt('Enter the change in stock quantity: '));
@@ -100,12 +100,24 @@ function updateStock(){
 }
 
 // FUNCTION - 3 - SEARCH by category
+function searchByCategory(){
+    console.log("------ 3 - SEARCH by category------");
+    const prompt = promptSync();
+    const category = prompt('Enter the category you want to search: ');
+    
+    for (let i = 0; i<inventory.length; i++){
+        if (inventory[i].category === category){
+            printItemDetails(inventory[i]);
+        }
+    }
+}
 
 
 //test area
 let i: boolean = false;
 
 while (i == false) {
+    console.log("-------");
     const prompt = promptSync();
     console.log("0 - PRINT whole inventory");
     console.log("1 - ADD a new item to inventory");
@@ -118,18 +130,17 @@ while (i == false) {
         case 0:
             inventory.forEach(element => {
                 console.log(printItemDetails(element));
-                console.log("-------");
               });
             break;
         case 1:
             addNewItem();
-            console.log("-------");
             break;
         case 2:
             updateStock();
             break;
-        case 3: 
-              
+        case 3:
+            searchByCategory();
+            break;
         case 4:
             i = true;
             break;
@@ -144,6 +155,6 @@ while (i == false) {
 // Extensions
 // ✅ 1. Function to add a new item to the inventory (input: the list of attributes of the item, output: item)
 // ✅ 2. Function to update the stock of an item (input: item, change in stock quantity, output: updated stock quantity )
-// 3. Function to find items by category (input: 'Electronics', output: all electronic items)
+// ✅ 3. Function to find items by category (input: 'Electronics', output: all electronic items)
 // 4. Function to calculate the total price of items in stock (input: 'item', price x stock, output: total price of items in stock)
 // 5. map refactoring
