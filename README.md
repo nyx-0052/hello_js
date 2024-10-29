@@ -11,7 +11,7 @@ Features:
 
 ## Installation
 
-Use the package manager [npm](https://pip.pypa.io/en/stable/) to install all the dependencies in package.json.
+Use the package manager [npm](https://nodejs.org/en/download/package-manager/current) to install all the dependencies in package.json.
 
 ```bash
 npm install
