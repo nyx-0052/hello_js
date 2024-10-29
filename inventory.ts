@@ -35,13 +35,17 @@ const laptop: Item = {
     warrantyPeriodMonths: 3,
 }
 
-//FUNCTION - to get item from id
 let inventory = new Map<number, Item>([
     [0, broccoli],
     [1, laptop]
 ])
 
-function getItem(id: number) {
+/**
+ * Get item using item ID.
+ * @param id - Item ID
+ * @returns - Item
+ */
+function getItem(id: number): Item {
     const itemRequired = inventory.get(id);
     if (itemRequired === undefined) {
        throw new Error('getItem failed: item is undefined');
@@ -49,7 +53,10 @@ function getItem(id: number) {
     return itemRequired;
 }
 
-// FUNCTION - 0 - PRINT whole inventory
+/**
+ * Prints all details of item out (formatted).
+ * @param item - Item
+ */
 function printItemDetails(item: Item) {
     console.log("ID:", item.id);
     console.log("Name:", item.name);
@@ -65,7 +72,10 @@ function printItemDetails(item: Item) {
     //console.log(`Warranty Period: ${item.warrantyPeriodMonths ?? "NA"} months`);
 }
 
-// FUNCTION - 1 - ADD a new item to inventory
+/**
+ * Allows user to input details for new item to inventory.
+ * @returns - new Item
+ */
 function addNewItem(): Item {
     console.log("------ 1 - ADD a new item to inventory ------")
     const prompt = promptSync();
@@ -89,8 +99,11 @@ function addNewItem(): Item {
     return item;
 }
 
-// FUNCTION - 2 - UPDATE a stock quantity
-function updateStock() {
+/**
+ * Changes quantity of stock of item.
+ * @returns - Changed stock quantity of item.
+ */
+function updateStock(): number{
     console.log("------ 2 - UPDATE a stock quantity ------")
     const prompt = promptSync();
     const id = Number(prompt('Enter the ID of the item you would like to change: '))
@@ -101,7 +114,9 @@ function updateStock() {
     return item.stock;
 }
 
-// FUNCTION - 3 - SEARCH by category
+/**
+ * Prints all items under specified category.
+ */
 function searchByCategory() {
     console.log("------ 3 - SEARCH by category------");
     const prompt = promptSync();
@@ -114,7 +129,9 @@ function searchByCategory() {
     }
 }
 
-// FUNCTION - 4 - CALCULATING total value of stock
+/**
+ * Calculates and prints the total value of the specfied item.
+ */
 function calculateTotalValue() {
     console.log("------ 4 - CALCULATING total value of stock ------");
     const prompt = promptSync();
@@ -169,6 +186,6 @@ while (i == false) {
 // ✅ 3. Function to find items by category (input: 'Electronics', output: all electronic items)
 // ✅ 4. Function to calculate the total price of items in stock (input: 'item', price x stock, output: total price of items in stock)
 // ✅ 5. map refactoring
-// 6. differnce between no of ==
+// 6. difference between no of ==
 // 7. difference between undefined and null
 // 8. difference between java and ts
