@@ -122,11 +122,11 @@ function searchByCategory() {
     const prompt = promptSync();
     const category = prompt('Enter the category you want to search: ');
 
-    for (let value of inventory.values()) {
-       if (value.category === category){
-        console.log(value.name);
-       }
-    }
+    inventory.forEach((value) => {
+        if (value.category === category) {
+            console.log(value.name);
+        }
+     });
 }
 
 /**
