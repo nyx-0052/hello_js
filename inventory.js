@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var prompt_sync_1 = require("prompt-sync");
+exports.laptop = exports.broccoli = void 0;
+exports.getItem = getItem;
+exports.calculateTotalValue = calculateTotalValue;
+exports.calculateTotalPrice = calculateTotalPrice;
+var promptSync = require('prompt-sync')();
 // Enum for category of items
 var Category;
 (function (Category) {
@@ -9,14 +13,14 @@ var Category;
     Category["Clothing"] = "Clothing";
 })(Category || (Category = {}));
 // DELCARING ITEMS
-var broccoli = {
+exports.broccoli = {
     id: 0,
     name: "broccoli",
     category: Category.Grocery,
     price: 60,
     stock: 100,
 };
-var laptop = {
+exports.laptop = {
     id: 1,
     name: "laptop",
     category: Category.Electronics,
@@ -25,8 +29,8 @@ var laptop = {
     warrantyPeriodMonths: 3,
 };
 var inventory = new Map([
-    [0, broccoli],
-    [1, laptop]
+    [0, exports.broccoli],
+    [1, exports.laptop]
 ]);
 /**
  * Get item using item ID.
@@ -64,7 +68,7 @@ function printItemDetails(item) {
  */
 function addNewItem() {
     console.log("------ 1 - ADD a new item to inventory ------");
-    var prompt = (0, prompt_sync_1.default)();
+    var prompt = promptSync();
     var id = Number(prompt('Enter the ID '));
     var name = prompt('Enter the name ');
     var category = prompt('Enter the category ');
@@ -88,7 +92,7 @@ function addNewItem() {
  */
 function updateStock() {
     console.log("------ 2 - UPDATE a stock quantity ------");
-    var prompt = (0, prompt_sync_1.default)();
+    var prompt = promptSync();
     var id = Number(prompt('Enter the ID of the item you would like to change: '));
     var change = Number(prompt('Enter the change in stock quantity: '));
     var item = getItem(id);
@@ -100,7 +104,7 @@ function updateStock() {
  */
 function searchByCategory() {
     console.log("------ 3 - SEARCH by category------");
-    var prompt = (0, prompt_sync_1.default)();
+    var prompt = promptSync();
     var category = prompt('Enter the category you want to search: ');
     inventory.forEach(function (value) {
         if (value.category === category) {
@@ -113,47 +117,60 @@ function searchByCategory() {
  */
 function calculateTotalValue() {
     console.log("------ 4 - CALCULATING total value of stock ------");
-    var prompt = (0, prompt_sync_1.default)();
+    var prompt = promptSync();
     var id = Number(prompt('Enter the ID of the item you would like to calculate the cost of: '));
     var item = getItem(id);
     console.log("The total price of", item.name, "is $", item.stock * item.price);
 }
-//test area
-var i = false;
-while (i == false) {
-    console.log("-------");
-    console.log("0 - PRINT whole inventory");
-    console.log("1 - ADD a new item to inventory");
-    console.log("2 - UPDATE a stock quantity");
-    console.log("3 - SEARCH by category");
-    console.log("4 - CALCULATING total value of stock");
-    console.log("5 - EXIT loop");
-    var prompt_1 = (0, prompt_sync_1.default)();
-    var userDecision = Number(prompt_1('Enter action: '));
-    switch (userDecision) {
-        case 0:
-            inventory.forEach(function (element) {
-                printItemDetails(element);
-                console.log('_______________');
-            });
-            break;
-        case 1:
-            addNewItem();
-            break;
-        case 2:
-            updateStock();
-            break;
-        case 3:
-            searchByCategory();
-            break;
-        case 4:
-            calculateTotalValue();
-            break;
-        case 5:
-            i = true;
-            break;
+function calculateTotalPrice(id) {
+    var item = getItem(id);
+    var itemName = item.name;
+    var totalPrice = item.stock * item.price;
+    return { itemName: itemName, totalPrice: totalPrice };
+}
+// abstract the function
+// const id = Number(promptSync('Enter the ID of the item you would like to calculate the cost of: '));
+// const result = calculateTotalPrice(id);
+// console.log("The total price of", result.itemName, "is $", result.totalPrice)
+function main() {
+    //test area
+    var i = false;
+    while (i == false) {
+        console.log("-------");
+        console.log("0 - PRINT whole inventory");
+        console.log("1 - ADD a new item to inventory");
+        console.log("2 - UPDATE a stock quantity");
+        console.log("3 - SEARCH by category");
+        console.log("4 - CALCULATING total value of stock");
+        console.log("5 - EXIT loop");
+        var prompt_1 = promptSync();
+        var userDecision = Number(prompt_1('Enter action: '));
+        switch (userDecision) {
+            case 0:
+                inventory.forEach(function (element) {
+                    printItemDetails(element);
+                    console.log('_______________');
+                });
+                break;
+            case 1:
+                addNewItem();
+                break;
+            case 2:
+                updateStock();
+                break;
+            case 3:
+                searchByCategory();
+                break;
+            case 4:
+                calculateTotalValue();
+                break;
+            case 5:
+                i = true;
+                break;
+        }
     }
 }
+// main()
 // Extensions
 // ✅ 1. Function to add a new item to the inventory (input: the list of attributes of the item, output: item)
 // ✅ 2. Function to update the stock of an item (input: item, change in stock quantity, output: updated stock quantity )

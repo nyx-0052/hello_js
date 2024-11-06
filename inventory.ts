@@ -1,4 +1,4 @@
-import promptSync from 'prompt-sync';
+const promptSync = require('prompt-sync')();
 
 // Enum for category of items
 enum Category {
@@ -8,7 +8,7 @@ enum Category {
 }
 
 // Interface to define the attributes of an item (object) in the inventory
-interface Item {
+export interface Item {
     id: number;
     name: string;
     category: Category;
@@ -17,8 +17,8 @@ interface Item {
     warrantyPeriodMonths?: number;  // Optional property for a warranty period in months (only applicable to electronics)
 }
 
-// DELCARING ITEMS
-const broccoli: Item = {
+// DECLARING ITEMS
+export const broccoli: Item = {
     id: 0,
     name: "broccoli",
     category: Category.Grocery,
@@ -26,7 +26,7 @@ const broccoli: Item = {
     stock: 100,
 }
 
-const laptop: Item = {
+export const laptop: Item = {
     id: 1,
     name: "laptop",
     category: Category.Electronics,
@@ -45,10 +45,10 @@ let inventory = new Map<number, Item>([
  * @param id - Item ID
  * @returns - Item
  */
-function getItem(id: number): Item {
+export function getItem(id: number): Item {
     const itemRequired = inventory.get(id);
     if (itemRequired === undefined) {
-       throw new Error('getItem failed: item is undefined');
+        throw new Error('getItem failed: item is undefined');
     }
     return itemRequired;
 }
@@ -78,12 +78,11 @@ function printItemDetails(item: Item) {
  */
 function addNewItem(): Item {
     console.log("------ 1 - ADD a new item to inventory ------")
-    const prompt = promptSync();
-    const id = Number(prompt('Enter the ID '));
-    const name = prompt('Enter the name ');
-    const category = prompt('Enter the category ');
-    const price = Number(prompt('Enter the price '));
-    const stock = Number(prompt('Enter the stock '));
+    const id = Number(promptSync('Enter the ID '));
+    const name = promptSync('Enter the name ');
+    const category = promptSync('Enter the category ');
+    const price = Number(promptSync('Enter the price '));
+    const stock = Number(promptSync('Enter the stock '));
     const warrantyPeriodMonths = Number(prompt('Enter the number of months '));
 
     const item: Item = {
@@ -103,11 +102,10 @@ function addNewItem(): Item {
  * Changes quantity of stock of item.
  * @returns - Changed stock quantity of item.
  */
-function updateStock(): number{
+function updateStock(): number {
     console.log("------ 2 - UPDATE a stock quantity ------")
-    const prompt = promptSync();
-    const id = Number(prompt('Enter the ID of the item you would like to change: '))
-    const change = Number(prompt('Enter the change in stock quantity: '));
+    const id = Number(promptSync('Enter the ID of the item you would like to change: '))
+    const change = Number(promptSync('Enter the change in stock quantity: '));
 
     const item = getItem(id);
     item.stock += change;
@@ -119,66 +117,72 @@ function updateStock(): number{
  */
 function searchByCategory() {
     console.log("------ 3 - SEARCH by category------");
-    const prompt = promptSync();
-    const category = prompt('Enter the category you want to search: ');
+    const category = promptSync('Enter the category you want to search: ');
 
     inventory.forEach((value) => {
         if (value.category === category) {
             console.log(value.name);
         }
-     });
+    });
 }
 
 /**
- * Calculates and prints the total value of the specfied item.
+ * 
+ * @param id - the ID number of the stock.
+ * @returns - name of the item as a string, total price of the stock.
  */
-function calculateTotalValue() {
+export function calculateTotalPrice(): {itemName: string, totalPrice: number} {
     console.log("------ 4 - CALCULATING total value of stock ------");
-    const prompt = promptSync();
-    const id = Number(prompt('Enter the ID of the item you would like to calculate the cost of: '));
+    const id = Number(promptSync('Enter the ID of the item you would like to calculate the cost of: '));
     const item = getItem(id);
-    console.log("The total price of", item.name, "is $", item.stock*item.price);
-
+    const itemName = item.name;
+    const totalPrice = item.stock * item.price;
+    return {itemName, totalPrice};
 }
 
-//test area
-let i: boolean = false;
+function main() {
+    //test area
+    let i: boolean = false;
 
-while (i == false) {
-    console.log("-------");
-    console.log("0 - PRINT whole inventory");
-    console.log("1 - ADD a new item to inventory");
-    console.log("2 - UPDATE a stock quantity")
-    console.log("3 - SEARCH by category")
-    console.log("4 - CALCULATING total value of stock")
-    console.log("5 - EXIT loop")
-    const prompt = promptSync();
-    const userDecision = Number(prompt('Enter action: '));
+    while (i == false) {
+        console.log("-------");
+        console.log("0 - PRINT whole inventory");
+        console.log("1 - ADD a new item to inventory");
+        console.log("2 - UPDATE a stock quantity")
+        console.log("3 - SEARCH by category")
+        console.log("4 - CALCULATING total value of stock")
+        console.log("5 - EXIT loop")
+        const userDecision = Number(promptSync('Enter action: '));
 
-    switch (userDecision) {
-        case 0:
-            inventory.forEach(element => {
-                printItemDetails(element);
-                console.log('_______________')
-            });
-            break;
-        case 1:
-            addNewItem();
-            break;
-        case 2:
-            updateStock();
-            break;
-        case 3:
-            searchByCategory();
-            break;
-        case 4:
-            calculateTotalValue();
-            break;
-        case 5:
-            i = true;
-            break;
+        switch (userDecision) {
+            case 0:
+                inventory.forEach(element => {
+                    printItemDetails(element);
+                    console.log('_______________');
+                });
+                break;
+            case 1:
+                addNewItem();
+                break;
+            case 2:
+                updateStock();
+                break;
+            case 3:
+                searchByCategory();
+                break;
+            case 4:
+                const {itemName, totalPrice} = calculateTotalPrice();
+                console.log("The total price of", itemName, "is $", totalPrice);
+                console.log('_______________');
+                break;
+            case 5:
+                i = true;
+                break;
+        }
     }
 }
+
+main();
 
 // Extensions
 // ✅ 1. Function to add a new item to the inventory (input: the list of attributes of the item, output: item)
